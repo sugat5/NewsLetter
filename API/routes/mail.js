@@ -29,7 +29,7 @@ route.post("/", jsonParser, async (req, res) => {
  // send mail with defined transport object
   let mailOptions = {
     from:emailFrom ,
-    to: "sugatbodade@google.com",
+    to: "sugatbodade@gmail.com",
     subject:newMail.subject,
     text:newMail.content
   };
