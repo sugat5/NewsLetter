@@ -1,50 +1,49 @@
 "use strict";
+require("dotenv").config();
 const nodemailer = require("nodemailer");
-const express=require("express")
-const bodyParser=require("body-parser")
-const jsonParser=bodyParser.json()
-const route=express.Router()
+const express = require("express");
+const bodyParser = require("body-parser");
+const jsonParser = bodyParser.json();
+const route = express.Router();
+const emailFrom = process.env.EMAIL;
+const password = process.env.PASSWORD;
+const Email = require("../schemas/mail");
+const User=require("../schemas/user");
+const { getMaxListeners } = require("../schemas/mail");
 
+const options = {
+  service: "gmail",
+  port: 587,
+  secure: false,
+  auth: {
+    user: emailFrom,
+    pass: password,
+  },
+};
 
+const transporter = nodemailer.createTransport(options);
+route.post("/", jsonParser, async (req, res) => {
+  let newMail = new Email({ ...req.body });
+  await newMail.save();
+ 
+ // send mail with defined transport object
+  let mailOptions = {
+    from:emailFrom ,
+    to: "sugatbodade@google.com",
+    subject:newMail.subject,
+    text:newMail.content
+  };
 
-route.post("/",(req,res)=>{
+  transporter.sendMail(mailOptions, (error, data) => {
+    if (error) {
+      console.log(error);
+      res.status(400).send("Email delivery failed", error);
+    } else {
+      console.log( data);
+      res.status(200).send(data);
+    }
+  });
+ 
+});
 
-    
-// async..await is not allowed in global scope, must use a wrapper
-async function main() {
-    // Generate test SMTP service account from ethereal.email
-    // Only needed if you don't have a real mail account for testing
-    let testAccount = await nodemailer.createTestAccount();
-  
-    // create reusable transporter object using the default SMTP transport
-    let transporter = nodemailer.createTransport({
-      host: "smtp.ethereal.email",
-      port: 587,
-      secure: false, // true for 465, false for other ports
-      auth: {
-        user:'roma.ritchie51@ethereal.email', // generated ethereal user
-        pass:  'He7rVFv59nfTJmyGyz', // generated ethereal password
-      },
-    });
-  
-    // send mail with defined transport object
-    let info = await transporter.sendMail({
-      from: "roma.ritchie51@ethereal.email",
-      to: "sugatbodade@gmail.com", // list of receivers
-      subject: "Hello ✔", // Subject line
-      text: "Hello welcome to nodemailer", // plain text body
-    
-    });
-
-  
-    console.log("Message sent: %s", info.messageId);
-    // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-  
-    // Preview only available when sending through an Ethereal account
-    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-    // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
-  }
-  main().catch(console.error)
-  })
-
-module.exports=route;
+module.exports = route;
