@@ -32,8 +32,9 @@ function Subscriptionform() {
   return (
     <div className="subscribe-form">
       <div className="head">
-        <h1>Subscribe to Our newsletter</h1>
-        <p>We'll give you just the right amount of love! <br/> Sign up for our weekly update and be the first to know about our specials and promotions.</p>
+        <h1>Subscribe for New and Exciting Newsletter's</h1>
+        <p>We'll give you just the right amount of love  ! 
+Subscribe for our weekly updates and be the first to know about our special offers and promotions.</p>
       </div>
       
       <img className="img" src="https://media.vanityfair.com/photos/618ec1c135e0316e6b877f2d/master/w_1920,c_limit/newsletter-subscriptions-fatigue.png" alt="" />
