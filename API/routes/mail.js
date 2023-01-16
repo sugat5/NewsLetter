@@ -1,4 +1,4 @@
-"use strict";
+
 require("dotenv").config();
 const nodemailer = require("nodemailer");
 const express = require("express");
@@ -9,7 +9,6 @@ const emailFrom = process.env.EMAIL;
 const password = process.env.PASSWORD;
 const Email = require("../schemas/mail");
 const User=require("../schemas/user");
-const { getMaxListeners } = require("../schemas/mail");
 
 const options = {
   service: "gmail",
@@ -26,10 +25,12 @@ route.post("/", jsonParser, async (req, res) => {
   let newMail = new Email({ ...req.body });
   await newMail.save();
  
+  const users = await User.find({});
+  const toMail= users.map(user => user.email)
  // send mail with defined transport object
   let mailOptions = {
     from:emailFrom ,
-    to: "sugatbodade@gmail.com",
+    to: toMail,
     subject:newMail.subject,
     text:newMail.content
   };
@@ -47,3 +48,4 @@ route.post("/", jsonParser, async (req, res) => {
 });
 
 module.exports = route;
+

@@ -27,7 +27,9 @@ function Subscriptionform() {
     onSubmit: (value) => {
       dispatch(subscribe(value));
       console.log(value);
+      formik.resetForm()
     },
+    
   });
   return (
     <div className="subscribe-form">
