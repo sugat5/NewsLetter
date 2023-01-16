@@ -12,7 +12,8 @@ const dataBase = mongoose.connect(mongoDB);
 const mailRoute = require("./routes/mail");
 app.use("/email", mailRoute);
 
-app.post("/subscribe", jsonParser, async (req, res) => {
+
+app.post("/subscribe" ,jsonParser, async (req, res) => {
   let existingUser = await User.findOne({ email: req.body.email });
   if (existingUser) {
     return res
@@ -44,3 +45,6 @@ dataBase
     );
   })
   .catch((e) => console.log(e));
+
+
+  

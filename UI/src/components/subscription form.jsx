@@ -88,7 +88,7 @@ Subscribe for our weekly updates and be the first to know about our special offe
             name="email"
             type={"text"}
             onChange={formik.handleChange}
-            placeholder="Enter_gmail"
+            placeholder="Enter_Email"
             value={formik.values.email}
             className="input"
             id="email"
